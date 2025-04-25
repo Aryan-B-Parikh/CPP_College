@@ -1,51 +1,45 @@
 #include <iostream>
 using namespace std;
 
-class Point {
+class Point
+{
 private:
-    float x;
-    float y;
+    float x, y;
 
 public:
-    Point(float x = 0, float y = 0) {
-        this->x = x;
-        this->y = y;
-    }
+    Point(float x = 0, float y = 0) : x(x), y(y) {}
 
-    Point* move(float &dx, float &dy) {
-        x += dx;
-        y += dy;
+    Point *shift(float dx, float dy)
+    {
+        this->x += dx;
+        this->y += dy;
         return this;
     }
 
-    void print() const {
-        cout << "(" << x << ", " << y << ")\n";
+    void print() const
+    {
+        cout << "Updated Position: (" << x << ", " << y << ")" << endl;
     }
 };
 
-int main() {
+int main()
+{
     float x, y, dx1, dy1, dx2, dy2;
 
-    cout << "Enter initial coordinates of the point (x y): ";
+    cout << "Enter the original point (x y): ";
     cin >> x >> y;
 
-    Point* p = new Point(x, y);
+    Point p(x, y);
 
-    cout << "Initial coordinates of the point: ";
-    p->print();
-
-    cout << "Enter the change in coordinates (dx1 dy1): ";
+    cout << "Enter the first shift (dx1 dy1): ";
     cin >> dx1 >> dy1;
+    p.shift(dx1, dy1)->print();
 
-    cout << "Enter the change in coordinates (dx2 dy2): ";
+    cout << "Enter the second shift (dx2 dy2): ";
     cin >> dx2 >> dy2;
-
-    p->move(dx1, dy1)->move(dx2,dy2);
-
-    cout << "Updated coordinates of the point: ";
-    p->print();
-
-    delete p;
+    p.shift(dx2, dy2)->print();
+    
+    cout<<"\n\nAryan Parikh"<<"\n"<<"24ce070"<<endl;
 
     return 0;
 }
