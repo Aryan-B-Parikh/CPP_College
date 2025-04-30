@@ -53,6 +53,6 @@ int main() {
 
     delete[] arr1;
     delete[] arr2;
-
+    cout<<"\n\nAryan Parikh"<<"\n"<<"24ce070"<<endl;
     return 0;
 }
