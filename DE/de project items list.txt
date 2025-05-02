@@ -1,0 +1,7 @@
+Arduino uno-300
+16 x 2 LCD with U2C communication board-200
+12 V solenoid lock-350
+channel relay module-32
+4 x 4 key pad-100
+9 volt battery
+10 jumper wires
