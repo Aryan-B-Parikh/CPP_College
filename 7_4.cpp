@@ -1,20 +1,53 @@
 #include <iostream>
 #include <fstream>
 #include <iomanip>
-#include <vector>
-#include <string>
+#include <cstring>
+
 using namespace std;
 
+struct Student {
+    char name[50];
+    float marks;
+    char grade;
+};
+
+ostream& alignColumn(ostream& os) {
+    return os << setw(15) << left;
+}
+
+void generateReport(const char* filename) {
+    ifstream file(filename);
+
+    if (!file.is_open()) {
+        cerr << "Error: Could not open file \"" << filename << "\" for reading.\n";
+        return;
+    }
+
+    Student student;
+
+    cout << "\n======= Student Performance Report =======\n";
+    cout << alignColumn << "Name"
+         << alignColumn << "Marks"
+         << alignColumn << "Grade" << endl;
+    cout << string(45, '-') << endl;
+
+    while (file >> student.name >> student.marks >> student.grade) {
+        cout << alignColumn << student.name
+             << alignColumn << fixed << setprecision(2) << student.marks
+             << alignColumn << student.grade << endl;
+    }
+
+    file.close();
+}
+
 int main() {
-    ifstream fin("students.txt");
-    struct Rec { string name; int marks; string grade; };
-    vector<Rec> v;
-    string n; int m; string g;
-    while (fin >> n >> m >> g)
-        v.push_back({n,m,g});
-    cout << left << setw(15) << "Name" << setw(7) << "Marks" << setw(7) << "Grade" << endl;
-    for (auto &r : v)
-        cout << setw(15) << r.name << setw(7) << r.marks << setw(7) << r.grade << endl;
+    const char* filename = "students.txt";
+
+    cout << "=== Student Report Generator ===\n";
+
+    generateReport(filename);
+
+
         cout<<"Aryan Parikh"<<"\n"<<"24ce070"<<endl;
     return 0;
 }
