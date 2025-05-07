@@ -1,35 +1,117 @@
 #include <iostream>
 #include <fstream>
-#include <string>
+#include <cstring>
+
 using namespace std;
 
-struct Item { string name; int qty; double price; };
+
+struct Product {
+    char name[50];
+    int quantity;
+    float price;
+};
+
+
+void addProduct(const char* filename) {
+    Product product;
+
+    cout << "\nEnter Product Name: ";
+    cin.ignore();  
+    cin.getline(product.name, 50);
+
+    cout << "Enter Quantity: ";
+    cin >> product.quantity;
+
+    cout << "Enter Price: ";
+    cin >> product.price;
+
+    ofstream file(filename, ios::app | ios::binary); 
+    if (!file) {
+        cerr << "Error: Could not open file to add product.\n";
+        return;
+    }
+
+    file.write(reinterpret_cast<char*>(&product), sizeof(Product));
+    file.close();
+
+    cout << "Product added successfully.\n";
+}
+
+
+void viewInventory(const char* filename) {
+    ifstream file(filename, ios::in | ios::binary);
+    if (!file) {
+        cerr << "Error: Could not open inventory file.\n";
+        return;
+    }
+
+    Product product;
+    cout << "\n--- Inventory List ---\n";
+    while (file.read(reinterpret_cast<char*>(&product), sizeof(Product))) {
+        cout << "Name     : " << product.name << endl;
+        cout << "Quantity : " << product.quantity << endl;
+        cout << "Price    : " << product.price <<" rupees"<< endl;
+        cout << "----------------------\n";
+    }
+
+    file.close();
+}
+
+void searchProduct(const char* filename) {
+    char searchName[50];
+    cout << "\nEnter Product Name to Search: ";
+    cin.ignore();
+    cin.getline(searchName, 50);
+
+    ifstream file(filename, ios::in | ios::binary);
+    if (!file) {
+        cerr << "Error: Could not open file for searching.\n";
+        return;
+    }
+
+    Product product;
+    bool found = false;
+
+    while (file.read(reinterpret_cast<char*>(&product), sizeof(Product))) {
+        if (strcmp(product.name, searchName) == 0) {
+            cout << "\nProduct Found:\n";
+            cout << "Name     : " << product.name << endl;
+            cout << "Quantity : " << product.quantity << endl;
+            cout << "Price    : rupees" << product.price << endl;
+            found = true;
+            break;
+        }
+    }
+
+    if (!found) {
+        cout << "Product not found in inventory.\n";
+    }
+
+    file.close();
+}
 
 int main() {
-    string cmd;
-    while (true) {
-        cout << "Enter command (add/view/search/exit): "; cin >> cmd;
-        if (cmd == "add") {
-            Item it;
-            cout << "Name: "; cin >> it.name;
-            cout << "Qty: "; cin >> it.qty;
-            cout << "Price: "; cin >> it.price;
-            ofstream fout("inventory.txt", ios::app);
-            fout << it.name << " " << it.qty << " " << it.price << "\n";
-        } else if (cmd == "view") {
-            ifstream fin("inventory.txt");
-            while (fin >> cmd) {
-                double q,p; fin >> q >> p;
-                cout << cmd << " " << q << " " << p << endl;
-            }
-        } else if (cmd == "search") {
-            cout << "Search name: "; cin >> cmd;
-            ifstream fin("inventory.txt");
-            string n; int q; double p;
-            while (fin >> n >> q >> p)
-                if (n == cmd) cout << n << " " << q << " " << p << endl;
-        } else break;
-    }
+    const char* filename = "inventory.dat";
+    int choice;
+
+    do {
+        cout << "\n=== Inventory Management System ===\n";
+        cout << "1. Add Product\n";
+        cout << "2. View Inventory\n";
+        cout << "3. Search Product\n";
+        cout << "4. Exit\n";
+        cout << "Enter your choice: ";
+        cin >> choice;
+
+        switch (choice) {
+            case 1: addProduct(filename); break;
+            case 2: viewInventory(filename); break;
+            case 3: searchProduct(filename); break;
+            case 4: cout << "Exiting...\n"; break;
+            default: cout << "Invalid choice. Try again.\n";
+        }
+
+    } while (choice != 4);
     cout<<"Aryan Parikh"<<"\n"<<"24ce070"<<endl;
     return 0;
 }
