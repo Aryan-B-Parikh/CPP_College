@@ -123,7 +123,7 @@ int main() {
         }
     } while (choice != 5);
     
-    cout<<"Aryan Parikh"<<"\n"<<"24ce070"<<endl;
+    cout<<"Aryan Parikh"<<"\n\n"<<"24ce070"<<endl;
 
     return 0;
 }
